@@ -5,13 +5,54 @@
                 "UDUUUUURUDLLLRRRDRDRUDDRLLDRRLDRLLUURRULUULULRLLRUDDRLDRLUURDUDLURUULLLULLRRRULRLURRDDULLULULRUDDDUURDRLUDUURRRRUUULLRULLLDLURUDLDDLLRRRULDLLUURDRRRDRDURURLRUDLDLURDDRLLLUUDRUULLDLLLLUUDRRURLDDUDULUDLDURDLURUURDUUUURDLLLRUUURDUUUDLDUDDLUDDUDUDUDLDUDUUULDULUURDDLRRRULLUDRRDLUDULDURUURULLLLUDDDLURURLRLRDLRULRLULURRLLRDUDUDRULLRULRUDLURUDLLDUDLRDRLRDURURRULLDDLRLDDRLRDRRDLRDDLLLLDUURRULLRLLDDLDLURLRLLDULRURRRRDULRLRURURRULULDUURRDLURRDDLDLLLRULRLLURLRLLDDLRUDDDULDLDLRLURRULRRLULUDLDUDUDDLLUURDDDLULURRULDRRDDDUUURLLDRDURUDRUDLLDRUD"
                 "ULRDULURRDDLULLDDLDDDRLDUURDLLDRRRDLLURDRUDDLDURUDRULRULRULULUULLLLDRLRLDRLLLLLRLRRLRLRRRDDULRRLUDLURLLRLLURDDRRDRUUUDLDLDRRRUDLRUDDRURRDUUUDUUULRLDDRDRDRULRLLDLDDLLRLUDLLLLUURLDLRUDRLRDRDRLRULRDDURRLRUDLRLRLDRUDURLRDLDULLUUULDRLRDDRDUDLLRUDDUDURRRRDLDURRUURDUULLDLRDUDDLUDDDRRRULRLULDRLDDRUURURLRRRURDURDRULLUUDURUDRDRLDLURDDDUDDURUDLRULULURRUULDRLDULRRRRDUULLRRRRLUDLRDDRLRUDLURRRDRDRLLLULLUULRDULRDLDUURRDULLRULRLRRURDDLDLLRUUDLRLDLRUUDLDDLLULDLUURRRLRDULRLRLDRLDUDURRRLLRUUDLUURRDLDDULDLULUUUUDRRULLLLLLUULDRULDLRUDDDRDRDDURUURLURRDLDDRUURULLULUUUDDLRDULDDLULDUDRU"
                 "LRLRLRLLLRRLUULDDUUUURDULLLRURLDLDRURRRUUDDDULURDRRDURLRLUDLLULDRULLRRRDUUDDRDRULLDDULLLUURDLRLRUURRRLRDLDUDLLRLLURLRLLLDDDULUDUDRDLRRLUDDLRDDURRDRDUUULLUURURLRRDUURLRDLLUDURLRDRLURUURDRLULLUUUURRDDULDDDRULURUULLUDDDDLRURDLLDRURDUDRRLRLDLRRDDRRDDRUDRDLUDDDLUDLUDLRUDDUDRUDLLRURDLRUULRUURULUURLRDULDLDLLRDRDUDDDULRLDDDRDUDDRRRLRRLLRRRUUURRLDLLDRRDLULUUURUDLULDULLLDLULRLRDLDDDDDDDLRDRDUDLDLRLUDRRDRRDRUURDUDLDDLUDDDDDDRUURURUURLURLDULUDDLDDLRUUUULRDRLUDLDDLLLRLLDRRULULRLRDURRRLDDRDDRLU"))
+(defn abs "(abs n) is the absolute value of n" [n]
+  (cond
+   (not (number? n)) (throw (IllegalArgumentException.
+                             "abs requires a number"))
+   (neg? n) (- n)
+   :else n))
 
 (defn restrict [n]
   (cond (>= n 1) 1 (<= n -1) -1 :else 0))
 
-(defn fff [line]
-  (let [f (frequencies (vec line))
-        coords (map restrict [(- (f \R) (f\L)) (- (f \U) (f \D))])
-        ]
-    coords
-    ))
+(def deltas {\U [0 1] \D [0 -1] \L [-1 0] \R [1 0]})
+
+(defn keypad-num [[x y]] (+ x (- 5 (* 3 y))))
+
+(defn move [[x y] [dx dy]] (map restrict [(+ x dx) (+ y dy)]))
+
+(defn make-move [origin l]
+  (reduce move origin (map #(deltas %1) (vec l))))
+
+(defn make-moves [inp origin]
+  (if (empty? inp) []
+    (let [no (make-move origin (first inp))]
+      (cons no (make-moves (rest inp) no)))))
+
+(defn compute-code [inp]
+  (map keypad-num (make-moves inp [0 0])))
+
+; exercise 2
+
+(def fancy-keypad-num {[0 2] "1" [-1 1] "2" [0 1] "3" [1 1] "4"
+                       [-2 0] "5" [-1 0] "6" [0 0] "7" [1 0] "8" [2 0] "9"
+                       [-1 -1] "A" [0 -1] "B" [1 -1] "C" [0 -2] "D"})
+
+(defn restrict-delta [[x y] [dx dy]]
+  (let [ax (abs (+ x dx)) ay (abs (+ y dy)) lx (- 2 (abs y)) ly (- 2 (abs x))]
+    [(if (> ax lx) 0 dx) (if (> ay ly) 0 dy)]))
+
+(defn fancy-move [[x y] [dx dy]]
+  (let [[ndx ndy] (restrict-delta [x y] [dx dy])]
+   [(+ x ndx) (+ y ndy)]))
+
+(defn make-fancy-move [origin l]
+  (reduce fancy-move origin (map #(deltas %1) (vec l))))
+
+(defn make-fancy-moves [inp origin]
+  (if (empty? inp) []
+    (let [no (make-fancy-move origin (first inp))]
+      (cons no (make-fancy-moves (rest inp) no)))))
+
+(defn compute-fancy-code [inp]
+  (map fancy-keypad-num (make-fancy-moves inp [0 0])))
