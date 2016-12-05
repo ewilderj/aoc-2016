@@ -16,7 +16,7 @@
 (defn abs "(abs n) is the absolute value of n" [n]
   (cond
    (not (number? n)) (throw (IllegalArgumentException.
-			     "abs requires a number"))
+                             "abs requires a number"))
    (neg? n) (- n)
    :else n))
 
@@ -27,8 +27,8 @@
 
 (defn step [[x y d] [turn dist]]
   (let [nd (rot turn d)]
-    (conj (move x y dist (get compass nd)) nd)
-    ))
+    (conj (move x y dist (get compass nd)) nd)))
+
 
 (defn distance [inp]
   (reduce aplus (take 2 (reduce step [0 0 0] (get-pairs inp)))))
@@ -37,8 +37,8 @@
 
 (defn expand-move [[x y] [dx dy] n]
   (for [i (range 1 (inc n))]
-    [(+ x (* i dx)) (+ y (* i dy))])
-  )
+    [(+ x (* i dx)) (+ y (* i dy))]))
+
 
 (defn pace [[trail d] [turn dist]]
   (let [nd (rot turn d)]
@@ -48,8 +48,8 @@
   (loop [traild [[[0 0]] 0] moves ii]
     (if (empty? moves)
       traild
-      (recur (pace traild (first moves)) (rest moves)))
-    ))
+      (recur (pace traild (first moves)) (rest moves)))))
+
 
 (defn distance-of-hq [inp]
   (let [l (first (follow-trail (get-pairs inp)))
