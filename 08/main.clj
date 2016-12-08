@@ -4,10 +4,10 @@
 (def inp (str/split-lines (slurp "/Users/edd/git/aoc-2016/08/puzzle.txt")))
 
 (defn board [w h]
-  (apply assoc {} (interleave (for [x (range w) y (range h)] [x y]) (repeat 0))))
+  (apply assoc {} (interleave (for [x (range w) y (range h)] [x y]) (repeat \space))))
 
 (defn rect [w h b]
-  (apply assoc b (interleave (for [x (range w) y (range h)] [x y]) (repeat 1))))
+  (apply assoc b (interleave (for [x (range w) y (range h)] [x y]) (repeat \X))))
 
 (defn right [l] (cons (last l) (drop-last l)))
 
@@ -32,12 +32,10 @@
     (if (empty? i) b (recur (rest i) (move (first i) b)))))
 
 (defn draw-board [b]
-  (for [y (range 6)]
-       (str/join (map str (for [x (range 50)]
-                            (if (= 0 (b [x y])) " " "X"))))))
+  (for [y (range 6)] (str/join (map str (for [x (range 50)] (b [x y]))))))
 
 (defn part-one []
-  (((comp frequencies vals) (compute-board)) 1))
+  (((comp frequencies vals) (compute-board)) \X))
 
 (defn part-two []
   (println (str/join "\n" (draw-board (compute-board)))))
