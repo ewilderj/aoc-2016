@@ -16,19 +16,16 @@
         rvs (nth (iterate right (map b ks)) tms)]
     (apply assoc b (interleave ks rvs))))
 
-(defn rotate-col [n tms b] (rotate first n tms b))
-(defn rotate-row [n tms b] (rotate second n tms b))
-
 (defn move [l b]
   (let [w (str/split l #"\s+") c (first w) a (rest w)]
     (cond
       (= "rect" c)
       (apply rect (concat (map read-string (str/split (first a) #"x")) [b]))
       (= "rotate" c)
-      (let [rc (if (= "row" (first a)) rotate-row rotate-col)
+      (let [rc (if (= "row" (first a)) second first)
             n (read-string (second (str/split (second a) #"=")))
             tms (read-string (nth a 3))]
-        (rc n tms b)))))
+        (rotate rc n tms b)))))
 
 (defn compute-board []
   (loop [i inp b (board 50 6)]
