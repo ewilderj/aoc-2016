@@ -14,7 +14,6 @@
 (defn c_cpy [r v w] (assoc r w (vorn r v)))
 (defn c_jnz [r w i] (if (= (vorn r w) 0) r (assoc r :pc (+ (r :pc) i -1))))
 
-
 (defn interp [r l]
   (let [[op a1 a2] (str/split l #"\s+") rs (inc_pc r)]
     (cond
