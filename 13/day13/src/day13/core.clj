@@ -41,6 +41,7 @@
     (let [o (came-from cur)]
       (if (nil? o) p (recur (conj p o) o)))))
 
+; a* search hacked up from the wikipedia algo
 (defn solve [tx ty gx gy m]
   (loop [closed #{} open #{[tx ty]} came-from {} gscore {[tx ty] 0}
          fscore {[tx ty] (estimate tx ty gx gy)} n 0]
@@ -64,6 +65,7 @@
 
 (defn part-one [] (count (solve 1 1 31 39 1364)))
 
+; breadth first search that terminates at a distance of the limit
 (defn solve2 [tx ty lim m]
   (loop [queue [[tx ty]] dist {[tx ty] 0}]
     (if (or (>= (dist (first queue)) lim) (empty? queue))
