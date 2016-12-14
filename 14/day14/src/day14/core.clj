@@ -17,9 +17,8 @@
 (defn search1k [f [i c]]
   (let [s (str/join [c c c c c]) m (+ i 1000)]
     (loop [n (inc i) found nil]
-      (if (or found (> n m))
-          found
-          (recur (inc n) (if (str/includes? (f n) s) [i n]))))))
+      (if (or found (> n m)) found
+        (recur (inc n) (if (str/includes? (f n) s) [i n]))))))
 
 (defn candidates [f]
   (filter #(some? (second %)) (map triple-seq (f))))
