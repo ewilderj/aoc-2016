@@ -9,10 +9,9 @@
 (defn hshes2017 [] (map #(vec [% (hsh2017 %)]) (range)))
 
 (defn triple-seq [[n x]]
-  (loop [ds [\0 \1 \2 \3 \4 \5 \6 \7 \8 \9 \a \b \c \d \e \f] c nil]
-    (if (or c (empty? ds)) [n c]
-      (let [d (first ds) s (str/join [d d d])]
-        (recur (rest ds) (if (str/includes? x s) d nil))))))
+  (loop [s x c nil]
+    (if (or c (< (count s) 3)) [n c]
+      (recur (rest s) (if (apply = (take 3 s)) (first s) nil)))))
 
 (defn search1k [f [i c]]
   (let [s (str/join [c c c c c]) m (+ i 1000)]
@@ -24,7 +23,7 @@
   (filter #(some? (second %)) (map triple-seq (f))))
 
 (defn part-one []
-  (first (nth (filter some? (map #(search1k hsh %) (candidates hshes))) 64)))
+  (first (nth (filter some? (map #(search1k hsh %) (candidates hshes))) 63)))
 
 (defn part-two []
-  (first (nth (filter some? (map #(search1k hsh2017 %) (candidates hshes2017))) 64)))
+  (first (nth (filter some? (map #(search1k hsh2017 %) (candidates hshes2017))) 63)))
