@@ -5,6 +5,6 @@
 (defn win? [ds t]
   (every? identity (map #(d-at-t? (second %) (+ (first %) (inc t))) (partition 2 (interleave (range) ds)))))
 (defn find-winner [d]
-  (second (first (filter first (partition 2 (interleave (map #(win? d %) (range)) (range)))))))
+  (first (filter some? (for [i (range)] (if (win? d i) i nil)))))
 (defn part-one [] (find-winner discs))
 (defn part-two [] (find-winner (conj discs [11 0])))
