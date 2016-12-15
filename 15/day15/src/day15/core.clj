@@ -1,6 +1,4 @@
-(ns day15.core
-  (:require [clojure.string :as str]
-            [clojure.set :as set]))
+(ns day15.core)
 
 (def discs [[13 1] [19 10] [3 2] [7 1] [5 3] [17 5]])
 (defn d-at-t? [[m o] t] (= 0 (mod (+ o t) m)))
