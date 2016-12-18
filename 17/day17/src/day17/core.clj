@@ -72,9 +72,7 @@
       ; n is a safety valve for when i screw up and infinitely recurse
      (println "FAILED IN " (str n))
      (let [cur (best-choice open fscore) [[x y] p] cur]
-       ; (println "\ncur" cur)
-       (if (= [x y] [max-x max-y])
-         p
+       (if (= [x y] [max-x max-y]) p
          (let [nc (conj closed cur)
                cn (set/difference (candidate-moves [x y] p) closed)
                no (set/union cn (remove #{cur} open))
