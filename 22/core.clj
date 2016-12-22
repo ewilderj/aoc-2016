@@ -6,7 +6,8 @@
 (defn parse-line [l]
   (->> l
     (re-find #"x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)")
-    (rest) (map #(Integer/valueOf %))))
+    (rest)
+    (map #(Integer/valueOf %))))
 
 (defn read-input [ls]
   (loop [i ls a {}]
