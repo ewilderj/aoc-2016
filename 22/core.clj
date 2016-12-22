@@ -14,9 +14,8 @@
       (let [[x y si us av] (parse-line (first i))]
         (recur (rest i) (assoc a [x y] [si us av]))))))
 
-(defn viable-pair? [n1 n2]
-  (let [[[x y] [u a]] n1 [[ex ey] [eu ea]] n2]
-    (not (or (= 0 u) (> u ea) (= [x y] [ex ey])))))
+(defn viable-pair? [[[x y] [u a]] [[ex ey] [eu ea]]]
+    (not (or (= 0 u) (> u ea) (= [x y] [ex ey]))))
 
 (defn part-one []
   (let [a (read-input inp)
