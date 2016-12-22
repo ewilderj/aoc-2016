@@ -25,6 +25,19 @@
     (reduce + (for [n entries]
                 (count (filter #(viable-pair? n %) entries))))))
 
+(defn make-grid [a]
+  (partition 34
+    (for [y (range 30) x (range 34)]
+      (let [[si us av] (a [x y])]
+        (cond
+          (>= si 500) \#
+          (= 0 us) \_
+          (= [33 0] [x y]) \G
+          :else \.)))))
+
+; to print grid, use
+; (println (str/join "\n" (map str/join (make-grid (read-input inp)))))
+
 ; part two, let's look at a few assumptions about the data
 ; first, there's exactly one empty node (17 6) capacity 89T
 ; our target data G is currently in (33 0) sized 71T
@@ -48,18 +61,6 @@
 ;
 ; we can start by transforming the grid into dots, hashes and G
 
-(defn make-grid [a]
-  (partition 34
-    (for [y (range 30) x (range 34)]
-      (let [[si us av] (a [x y])]
-        (cond
-          (>= si 500) \#
-          (= 0 us) \_
-          (= [33 0] [x y]) \G
-          :else \.)))))
-
-; to print grid, use
-; (println (str/join "\n" (map str/join (make-grid (read-input inp)))))
 ;
 ; pertinent part of grid is this-
 
