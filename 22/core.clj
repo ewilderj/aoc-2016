@@ -5,8 +5,8 @@
 
 (defn parse-line [l]
   (->> l
-    (re-seq #"x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)")
-    (first) (rest) (map #(Integer/valueOf %))))
+    (re-find #"x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)")
+    (rest) (map #(Integer/valueOf %))))
 
 (defn read-input [ls]
   (loop [i ls a {}]
@@ -15,9 +15,8 @@
         (recur (rest i) (assoc a [x y] [si us av]))))))
 
 (defn viable-pair? [n1 n2]
-  (let [[[x y] [u a]] n1
-        [[ex ey] [eu ea]] n2]
-    (if (or (= 0 u) (> u ea) (= [x y] [ex ey])) false true)))
+  (let [[[x y] [u a]] n1 [[ex ey] [eu ea]] n2]
+    (not (or (= 0 u) (> u ea) (= [x y] [ex ey])))))
 
 (defn part-one []
   (let [a (read-input inp)
