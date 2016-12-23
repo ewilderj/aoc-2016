@@ -46,7 +46,6 @@
 (defn gogo [regs]
   (let [maxpc (count inp)]
     (loop [rs (assoc regs :prog (vec inp)) n 0]
-      ; (println n)
       (if (or (>= n 8000000) (>= (rs :pc) maxpc)) [n rs]
         (recur (interp rs) (inc n))))))
 
