@@ -26,7 +26,6 @@
       (into {} (map #(vec [[(first %) y] (second %)])
                     (partition 2 (interleave (range) (nth i y))))))))
 
-
 (defn open-neighbors [m [x y]]
   (let [c [[(dec x) y] [(inc x) y] [x (dec y)] [x (inc y)]]]
     (filter (fn [p] (and
@@ -51,14 +50,12 @@
     (interleave (pairs targets) (map #(distance m %) (pairs targets)))))
 
 (defn best-route [return-to-base]
-  (let [m (make-maze inp)
-        ds (distances m)
+  (let [ds (distances (make-maze inp))
         rs (if return-to-base
              (map #(concat [\0] % [\0]) (permutations (rest targets)))
              (map #(cons \0 %) (permutations (rest targets))))]
     (for [r rs]
-      (let [c (map #(ds (sort %)) (partition 2 1 r))]
-        [r (reduce + c)]))))
+      [r (reduce + (map #(ds (sort %)) (partition 2 1 r)))])))
 
 (defn part-one []
   (second (first (sort-by second (best-route false)))))
