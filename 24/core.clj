@@ -6,11 +6,22 @@
 (def targets [\0 \1 \2 \3 \4])
 
 ; pairs of [start target] to measure the distances for
-(defn pairs []
+(defn pairs [ts]
   (apply concat
-    (for [x (range (count targets))]
-      (for [y (range (inc x) (count targets))]
-        [(nth targets x) (nth targets y)]))))
+    (for [x (range (count ts))]
+      (for [y (range (inc x) (count ts))]
+        [(nth ts x) (nth ts y)]))))
+
+; eval route lngths for (permutations (rest targets)))
+; (map #(cons \0 %) (permutations (rest targets)))
+(defn permutations [s]
+  (if (seq (rest s))
+     (apply concat
+       (for [x s] (map #(cons x %) (permutations (remove #{x} s)))))
+     [s]))
+
+(defn locate [m t]
+  ((set/map-invert m) t))
 
 (defn make-maze [i]
   (apply merge
