@@ -38,7 +38,7 @@
 (defn distance [m [t1 t2]]
   (let [a (locate m t1) b (locate m t2)]
     (loop [queue [a] dist {a 0}]
-      (if (empty? queue)
+      (if (= b (first queue))
         (dist b)
         (let [cur (first queue)
               cn (filter #(not (dist %)) (open-neighbors m cur))
